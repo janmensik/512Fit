@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import type { ControllerProfile, SceneLightInstance } from '../types/dmx';
 import {
   getChannelsPerFixture,
@@ -29,7 +29,6 @@ export function SimulatorTab({
   onSelectPage,
   onSelectLight,
 }: SimulatorTabProps) {
-  const [hideEmptyFixtures, setHideEmptyFixtures] = useState(false);
   const chPerFixture = getChannelsPerFixture(controller);
   const pageOffset = controller.hasABSwitch && selectedPage === 'B' ? controller.slidersPerPage : 0;
   const pageStartCh = (selectedFixture - 1) * chPerFixture + pageOffset + 1;
@@ -73,6 +72,33 @@ export function SimulatorTab({
 
   const selectedFixOcc = getFixtureOccupancy(selectedFixture);
 
+  const usedFixtures = Array.from(
+    { length: controller.fixtureCount },
+    (_, idx) => idx + 1
+  ).filter((fixNum) => getFixtureOccupancy(fixNum).isUsed);
+
+  useEffect(() => {
+    if (usedFixtures.length > 0 && !selectedFixOcc.isUsed) {
+      const firstFix = usedFixtures[0];
+      const occ = getFixtureOccupancy(firstFix);
+      onSelectFixture(firstFix);
+      if (controller.hasABSwitch) {
+        if (selectedPage === 'A' && !occ.hasPageA && occ.hasPageB) {
+          onSelectPage('B');
+        } else if (selectedPage === 'B' && !occ.hasPageB && occ.hasPageA) {
+          onSelectPage('A');
+        }
+      }
+    }
+  }, [
+    usedFixtures.length,
+    selectedFixOcc.isUsed,
+    controller.hasABSwitch,
+    selectedPage,
+    onSelectFixture,
+    onSelectPage,
+  ]);
+
   const sliders = Array.from({ length: controller.slidersPerPage }, (_, i) => {
     const sliderNum = i + 1;
     const dmxCh = pageStartCh + i;
@@ -98,97 +124,82 @@ export function SimulatorTab({
         {/* Top Row: Fixture Buttons */}
         {controller.fixtureCount > 1 && (
           <div>
-            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-zinc-400">
-                Fixture Select
-              </div>
-              <label className="flex cursor-pointer items-center gap-1.5 text-[11px] font-medium text-zinc-400 hover:text-zinc-200">
-                <input
-                  type="checkbox"
-                  checked={hideEmptyFixtures}
-                  onChange={(e) => setHideEmptyFixtures(e.target.checked)}
-                  className="h-3.5 w-3.5 accent-amber-500"
-                />
-                Hide Empty Fixtures
-              </label>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-2">
+              Fixture Select
             </div>
-            <div className="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-12 gap-2">
-              {Array.from({ length: controller.fixtureCount }, (_, idx) => {
-                const fixNum = idx + 1;
-                const isSelected = selectedFixture === fixNum;
-                const posList = fixturePositions(fixNum);
-                const occ = getFixtureOccupancy(fixNum);
+            {usedFixtures.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-zinc-800 bg-zinc-950/40 px-4 py-3 text-xs text-zinc-500">
+                No lights assigned to any fixture yet.
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-12 gap-2">
+                {usedFixtures.map((fixNum) => {
+                  const isSelected = selectedFixture === fixNum;
+                  const posList = fixturePositions(fixNum);
+                  const occ = getFixtureOccupancy(fixNum);
 
-                if (hideEmptyFixtures && !occ.isUsed && !isSelected) {
-                  return null;
-                }
-
-                return (
-                  <button
-                    key={fixNum}
-                    type="button"
-                    disabled={!occ.isUsed && !isSelected}
-                    onClick={() => {
-                      onSelectFixture(fixNum);
-                      if (controller.hasABSwitch) {
-                        if (selectedPage === 'A' && !occ.hasPageA && occ.hasPageB) {
-                          onSelectPage('B');
-                        } else if (selectedPage === 'B' && !occ.hasPageB && occ.hasPageA) {
-                          onSelectPage('A');
+                  return (
+                    <button
+                      key={fixNum}
+                      type="button"
+                      onClick={() => {
+                        onSelectFixture(fixNum);
+                        if (controller.hasABSwitch) {
+                          if (selectedPage === 'A' && !occ.hasPageA && occ.hasPageB) {
+                            onSelectPage('B');
+                          } else if (selectedPage === 'B' && !occ.hasPageB && occ.hasPageA) {
+                            onSelectPage('A');
+                          }
                         }
-                      }
-                    }}
-                    className={`flex flex-col items-center justify-center rounded-xl p-2.5 transition-all ${
-                      isSelected
-                        ? 'border-2 border-amber-400 bg-amber-500/25 text-amber-50 ring-2 ring-amber-400/50 shadow-lg shadow-amber-500/20'
-                        : occ.isUsed
-                        ? 'border-2 border-emerald-500 bg-emerald-950/70 text-emerald-100 shadow-md shadow-emerald-500/10 hover:bg-emerald-900/70'
-                        : 'border border-dashed border-zinc-800/80 bg-zinc-950/30 text-zinc-700 opacity-35 cursor-not-allowed'
-                    }`}
-                  >
-                    <div className="flex items-center gap-1.5">
-                      {occ.isUsed && !isSelected && (
-                        <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                      )}
-                      <span className="text-xs font-bold">FIX {fixNum}</span>
-                      {controller.hasABSwitch && (
-                        <span className="inline-flex items-center gap-0.5">
-                          <span
-                            className={`rounded px-1 text-[9px] font-extrabold ${
-                              occ.hasPageA
-                                ? 'bg-emerald-500 text-zinc-950'
-                                : 'bg-zinc-900 text-zinc-600'
-                            }`}
-                          >
-                            A
-                          </span>
-                          <span
-                            className={`rounded px-1 text-[9px] font-extrabold ${
-                              occ.hasPageB
-                                ? 'bg-emerald-500 text-zinc-950'
-                                : 'bg-zinc-900 text-zinc-600'
-                            }`}
-                          >
-                            B
-                          </span>
-                        </span>
-                      )}
-                    </div>
-                    <span
-                      className={`text-[10px] truncate max-w-full mt-0.5 ${
+                      }}
+                      className={`flex flex-col items-center justify-center rounded-xl p-2.5 transition-all min-w-0 ${
                         isSelected
-                          ? 'text-amber-200'
-                          : occ.isUsed
-                          ? 'text-emerald-300 font-medium'
-                          : 'text-zinc-600'
+                          ? 'border-2 border-amber-400 bg-amber-500/25 text-amber-50 ring-2 ring-amber-400/50 shadow-lg shadow-amber-500/20'
+                          : 'border-2 border-emerald-500 bg-emerald-950/70 text-emerald-100 shadow-md shadow-emerald-500/10 hover:bg-emerald-900/70'
                       }`}
                     >
-                      {posList.length > 0 ? posList.join(', ') : 'Empty'}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+                      <div className="flex items-center gap-1.5">
+                        {!isSelected && (
+                          <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                        )}
+                        <span className="text-xs font-bold">FIX {fixNum}</span>
+                        {controller.hasABSwitch && (
+                          <span className="inline-flex items-center gap-0.5">
+                            <span
+                              className={`rounded px-1 text-[9px] font-extrabold ${
+                                occ.hasPageA
+                                  ? 'bg-emerald-500 text-zinc-950'
+                                  : 'bg-zinc-900 text-zinc-600'
+                              }`}
+                            >
+                              A
+                            </span>
+                            <span
+                              className={`rounded px-1 text-[9px] font-extrabold ${
+                                occ.hasPageB
+                                  ? 'bg-emerald-500 text-zinc-950'
+                                  : 'bg-zinc-900 text-zinc-600'
+                              }`}
+                            >
+                              B
+                            </span>
+                          </span>
+                        )}
+                      </div>
+                      <span
+                        className={`text-[10px] truncate max-w-full mt-0.5 ${
+                          isSelected
+                            ? 'text-amber-200'
+                            : 'text-emerald-300 font-medium'
+                        }`}
+                      >
+                        {posList.length > 0 ? posList.join(', ') : 'Empty'}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
 

@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+:root {
+  --target-size: 24px;
+}
+
+@media (pointer: coarse) {
+  :root {
+    --target-size: 44px;
+  }
+}
+
+html {
+  scroll-padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+body {
+  overflow-wrap: break-word;
+}
+
+:where(button, select, textarea, input:not([type="checkbox"], [type="radio"])) {
+  min-block-size: var(--target-size);
+}
+
+:where(input, select, textarea) {
+  font-size: max(1rem, 1em);
+}
+
+/* Custom dark scrollbar for console aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}

@@ -1,0 +1,151 @@
+{
+  "controllers": [
+    {
+      "id": "ctrl-192-6fix-ab",
+      "name": "Standard 192ch DMX Controller (16 Sliders, A/B Page, 6 Fixtures)",
+      "slidersPerPage": 16,
+      "hasABSwitch": true,
+      "fixtureCount": 6,
+      "isFactory": true
+    },
+    {
+      "id": "ctrl-384-12fix-ab",
+      "name": "384ch DMX Console (16 Sliders, A/B Page, 12 Fixtures)",
+      "slidersPerPage": 16,
+      "hasABSwitch": true,
+      "fixtureCount": 12,
+      "isFactory": true
+    },
+    {
+      "id": "ctrl-16-simple",
+      "name": "Simple 16ch Slider Controller (16 Sliders, No A/B, 1 Fixture)",
+      "slidersPerPage": 16,
+      "hasABSwitch": false,
+      "fixtureCount": 1,
+      "isFactory": true
+    },
+    {
+      "id": "ctrl-24-ab",
+      "name": "48ch Two-Page Console (24 Sliders, A/B Page, 1 Fixture)",
+      "slidersPerPage": 24,
+      "hasABSwitch": true,
+      "fixtureCount": 1,
+      "isFactory": true
+    }
+  ],
+  "lights": [
+    {
+      "id": "light-fixed-rgbw-1",
+      "name": "Fixed RGBW LED #1",
+      "channelCount": 4,
+      "profileLabel": "4ch - RGBW",
+      "defaultFixedStartChannel": 3,
+      "isFactory": true
+    },
+    {
+      "id": "light-fixed-rgbw-2",
+      "name": "Fixed RGBW LED #2",
+      "channelCount": 4,
+      "profileLabel": "4ch - RGBW",
+      "defaultFixedStartChannel": 7,
+      "isFactory": true
+    },
+    {
+      "id": "light-fixed-rgbw-3",
+      "name": "Fixed RGBW LED #3",
+      "channelCount": 4,
+      "profileLabel": "4ch - RGBW",
+      "defaultFixedStartChannel": 11,
+      "isFactory": true
+    },
+    {
+      "id": "light-fixed-white-1",
+      "name": "Fixed White LED #1",
+      "channelCount": 1,
+      "profileLabel": "1ch - White",
+      "defaultFixedStartChannel": 23,
+      "isFactory": true
+    },
+    {
+      "id": "light-fixed-white-2",
+      "name": "Fixed White LED #2",
+      "channelCount": 1,
+      "profileLabel": "1ch - White",
+      "defaultFixedStartChannel": 24,
+      "isFactory": true
+    },
+    {
+      "id": "light-fixed-white-3",
+      "name": "Fixed White LED #3",
+      "channelCount": 1,
+      "profileLabel": "1ch - White",
+      "defaultFixedStartChannel": 25,
+      "isFactory": true
+    },
+    {
+      "id": "light-fixed-white-4",
+      "name": "Fixed White LED #4",
+      "channelCount": 1,
+      "profileLabel": "1ch - White",
+      "defaultFixedStartChannel": 26,
+      "isFactory": true
+    },
+    {
+      "id": "light-hp-2ch",
+      "name": "High-Power LED (2ch)",
+      "channelCount": 2,
+      "profileLabel": "2ch - White, Strobe",
+      "defaultFixedStartChannel": null,
+      "isFactory": true
+    },
+    {
+      "id": "light-lp-6ch",
+      "name": "Low-Power LED Par (6ch)",
+      "channelCount": 6,
+      "profileLabel": "6ch - RGBWAU",
+      "defaultFixedStartChannel": null,
+      "isFactory": true
+    },
+    {
+      "id": "light-dimmer-1ch",
+      "name": "Dimmer Pack Channel (1ch)",
+      "channelCount": 1,
+      "profileLabel": "1ch - Dimmer",
+      "defaultFixedStartChannel": null,
+      "isFactory": true
+    },
+    {
+      "id": "light-rgb-3ch",
+      "name": "RGB LED Par (3ch)",
+      "channelCount": 3,
+      "profileLabel": "3ch - RGB",
+      "defaultFixedStartChannel": null,
+      "isFactory": true
+    },
+    {
+      "id": "light-rgbw-4ch",
+      "name": "RGBW LED Par (4ch)",
+      "channelCount": 4,
+      "profileLabel": "4ch - RGBW",
+      "defaultFixedStartChannel": null,
+      "isFactory": true
+    },
+    {
+      "id": "light-rgbw-7ch",
+      "name": "RGBW Par + Dim/Strobe (7ch)",
+      "channelCount": 7,
+      "profileLabel": "7ch - Dim, RGBW, Strobe, Macro",
+      "defaultFixedStartChannel": null,
+      "isFactory": true
+    },
+    {
+      "id": "light-moving-head-11ch",
+      "name": "Moving Head Spot (11ch)",
+      "channelCount": 11,
+      "profileLabel": "11ch - Pan/Tilt/Color/Gobo/Dim",
+      "defaultFixedStartChannel": null,
+      "isFactory": true
+    }
+  ],
+  "defaultPositions": ["Front", "Back", "Left", "Right", "Spot", "Table"]
+}

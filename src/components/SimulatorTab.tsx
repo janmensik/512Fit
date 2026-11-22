@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { ControllerProfile, SceneLightInstance } from '../types/dmx';
 import {
   getChannelsPerFixture,
@@ -28,6 +29,7 @@ export function SimulatorTab({
   onSelectPage,
   onSelectLight,
 }: SimulatorTabProps) {
+  const [hideEmptyFixtures, setHideEmptyFixtures] = useState(false);
   const chPerFixture = getChannelsPerFixture(controller);
   const pageOffset = controller.hasABSwitch && selectedPage === 'B' ? controller.slidersPerPage : 0;
   const pageStartCh = (selectedFixture - 1) * chPerFixture + pageOffset + 1;
@@ -96,8 +98,19 @@ export function SimulatorTab({
         {/* Top Row: Fixture Buttons */}
         {controller.fixtureCount > 1 && (
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-2">
-              Fixture Select
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-zinc-400">
+                Fixture Select
+              </div>
+              <label className="flex cursor-pointer items-center gap-1.5 text-[11px] font-medium text-zinc-400 hover:text-zinc-200">
+                <input
+                  type="checkbox"
+                  checked={hideEmptyFixtures}
+                  onChange={(e) => setHideEmptyFixtures(e.target.checked)}
+                  className="h-3.5 w-3.5 accent-amber-500"
+                />
+                Hide Empty Fixtures
+              </label>
             </div>
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
               {Array.from({ length: controller.fixtureCount }, (_, idx) => {
@@ -106,37 +119,45 @@ export function SimulatorTab({
                 const posList = fixturePositions(fixNum);
                 const occ = getFixtureOccupancy(fixNum);
 
+                if (hideEmptyFixtures && !occ.isUsed && !isSelected) {
+                  return null;
+                }
+
                 return (
                   <button
                     key={fixNum}
                     type="button"
+                    disabled={!occ.isUsed && !isSelected}
                     onClick={() => onSelectFixture(fixNum)}
-                    className={`flex flex-col items-center justify-center rounded-xl border p-2.5 transition-all ${
+                    className={`flex flex-col items-center justify-center rounded-xl p-2.5 transition-all ${
                       isSelected
-                        ? 'border-amber-400 bg-amber-500/20 text-amber-100 ring-2 ring-amber-400/50 shadow-lg shadow-amber-500/10'
+                        ? 'border-2 border-amber-400 bg-amber-500/25 text-amber-50 ring-2 ring-amber-400/50 shadow-lg shadow-amber-500/20'
                         : occ.isUsed
-                        ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-200 hover:border-emerald-400 hover:bg-emerald-500/15'
-                        : 'border-zinc-800 bg-zinc-950/50 text-zinc-600 opacity-60 hover:opacity-90'
+                        ? 'border-2 border-emerald-500 bg-emerald-950/70 text-emerald-100 shadow-md shadow-emerald-500/10 hover:bg-emerald-900/70'
+                        : 'border border-dashed border-zinc-800/80 bg-zinc-950/30 text-zinc-700 opacity-35 cursor-not-allowed'
                     }`}
                   >
                     <div className="flex items-center gap-1.5">
+                      {occ.isUsed && !isSelected && (
+                        <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                      )}
                       <span className="text-xs font-bold">FIX {fixNum}</span>
                       {controller.hasABSwitch && (
                         <span className="inline-flex items-center gap-0.5">
                           <span
-                            className={`rounded px-1 text-[9px] font-bold border ${
+                            className={`rounded px-1 text-[9px] font-extrabold ${
                               occ.hasPageA
-                                ? 'bg-emerald-500/30 text-emerald-200 border-emerald-500/50'
-                                : 'bg-zinc-900 text-zinc-600 border-zinc-800'
+                                ? 'bg-emerald-500 text-zinc-950'
+                                : 'bg-zinc-900 text-zinc-600'
                             }`}
                           >
                             A
                           </span>
                           <span
-                            className={`rounded px-1 text-[9px] font-bold border ${
+                            className={`rounded px-1 text-[9px] font-extrabold ${
                               occ.hasPageB
-                                ? 'bg-emerald-500/30 text-emerald-200 border-emerald-500/50'
-                                : 'bg-zinc-900 text-zinc-600 border-zinc-800'
+                                ? 'bg-emerald-500 text-zinc-950'
+                                : 'bg-zinc-900 text-zinc-600'
                             }`}
                           >
                             B
@@ -144,7 +165,15 @@ export function SimulatorTab({
                         </span>
                       )}
                     </div>
-                    <span className="text-[10px] text-zinc-400 truncate max-w-full mt-0.5">
+                    <span
+                      className={`text-[10px] truncate max-w-full mt-0.5 ${
+                        isSelected
+                          ? 'text-amber-200'
+                          : occ.isUsed
+                          ? 'text-emerald-300 font-medium'
+                          : 'text-zinc-600'
+                      }`}
+                    >
                       {posList.length > 0 ? posList.join(', ') : 'Empty'}
                     </span>
                   </button>
@@ -181,7 +210,7 @@ export function SimulatorTab({
                         ? 'bg-sky-500 text-zinc-950'
                         : hasLights
                         ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/25'
-                        : 'text-zinc-500 hover:text-zinc-300'
+                        : 'text-zinc-500 opacity-40 hover:opacity-80 hover:text-zinc-300'
                     }`}
                   >
                     {hasLights && !active && (

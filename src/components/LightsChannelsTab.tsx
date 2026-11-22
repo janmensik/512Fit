@@ -62,6 +62,7 @@ export function LightsChannelsTab({
   const [quantity, setQuantity] = useState(1);
   const [catalogIsFixed, setCatalogIsFixed] = useState(false);
   const [catalogFixedStart, setCatalogFixedStart] = useState(1);
+  const [catalogCustomName, setCatalogCustomName] = useState('');
 
   // Position manager state
   const [showPositionManager, setShowPositionManager] = useState(false);
@@ -119,6 +120,9 @@ export function LightsChannelsTab({
         catalogLightId: template.id,
         selectedModeId: selectedMode?.id,
         name: `${template.name}${suffix}`,
+        customName: catalogCustomName.trim()
+          ? `${catalogCustomName.trim()}${suffix}`
+          : undefined,
         profileLabel,
         channelCount,
         channels,
@@ -131,6 +135,7 @@ export function LightsChannelsTab({
     setCustomPosInput('');
     setQuantity(1);
     setCatalogIsFixed(false);
+    setCatalogCustomName('');
   };
 
   const handleCreateCustomLight = (e: React.FormEvent) => {
@@ -430,6 +435,19 @@ export function LightsChannelsTab({
             </div>
 
             <div className="sm:col-span-12 flex flex-wrap items-center gap-4 pt-1">
+              <div className="flex-1 min-w-[200px]">
+                <label htmlFor="catalog-custom-name" className="sr-only">
+                  Custom Name / Note (optional)
+                </label>
+                <input
+                  id="catalog-custom-name"
+                  type="text"
+                  value={catalogCustomName}
+                  onChange={(e) => setCatalogCustomName(e.target.value)}
+                  placeholder="Custom name / note (optional, e.g. Drum Spot)"
+                  className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-1.5 text-xs text-zinc-100 placeholder:text-zinc-600 focus:border-amber-500 focus:outline-none"
+                />
+              </div>
               <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
                 <input
                   type="checkbox"
@@ -659,8 +677,13 @@ export function LightsChannelsTab({
                           {light.position}
                         </span>
                         <span className="font-semibold text-zinc-100 text-sm truncate">
-                          {light.name}
+                          {light.customName?.trim() || light.name}
                         </span>
+                        {light.customName?.trim() && (
+                          <span className="text-xs text-zinc-500 truncate">
+                            {light.name}
+                          </span>
+                        )}
                         <span className="text-xs text-zinc-400">({light.profileLabel})</span>
                         {light.isFixed && (
                           <span className="rounded bg-zinc-800 px-1.5 py-0.5 text-[11px] font-medium text-zinc-300">
@@ -675,6 +698,16 @@ export function LightsChannelsTab({
                         </span>
                         <span className="text-zinc-600">/</span>
                         <span className="text-sky-300 font-medium">{mapping.formattedSummary}</span>
+                        <input
+                          type="text"
+                          aria-label={`Custom name or note for ${light.name}`}
+                          value={light.customName || ''}
+                          onChange={(e) =>
+                            onUpdateLight(light.instanceId, { customName: e.target.value })
+                          }
+                          placeholder="+ Add custom name / note"
+                          className="ml-auto sm:ml-2 rounded border border-zinc-800 bg-zinc-950/70 px-2 py-0.5 text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-amber-500 focus:outline-none"
+                        />
                       </div>
                     </div>
 

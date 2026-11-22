@@ -5,6 +5,10 @@ import type {
   ValidationReport,
 } from '../types/dmx';
 
+export function getLightDisplayName(light: SceneLightInstance): string {
+  return light.customName?.trim() || light.name;
+}
+
 export function getPagesPerFixture(controller: ControllerProfile): number {
   return controller.hasABSwitch ? 2 : 1;
 }

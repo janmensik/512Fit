@@ -31,6 +31,7 @@ export interface SceneLightInstance {
   catalogLightId?: string;
   selectedModeId?: string;
   name: string;
+  customName?: string;
   profileLabel: string;
   channelCount: number;
   channels?: string[];

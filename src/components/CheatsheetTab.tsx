@@ -115,8 +115,13 @@ export function CheatsheetTab({
                           <div className="space-y-1">
                             <div className="flex flex-wrap items-center gap-1.5">
                               <span className="font-semibold text-zinc-100 text-sm">
-                                {light.name}
+                                {light.customName?.trim() || light.name}
                               </span>
+                              {light.customName?.trim() && (
+                                <span className="text-xs text-zinc-500">
+                                  {light.name}
+                                </span>
+                              )}
                               <span className="text-xs text-zinc-400">
                                 ({light.profileLabel})
                               </span>

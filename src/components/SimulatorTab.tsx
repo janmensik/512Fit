@@ -181,8 +181,11 @@ export function SimulatorTab({
                     <div className={`text-[10px] font-bold uppercase truncate ${posColor!.text}`}>
                       {primary.position}
                     </div>
-                    <div className="text-[11px] font-semibold text-zinc-100 truncate">
-                      {primary.name}
+                    <div
+                      className="text-[11px] font-semibold text-zinc-100 truncate"
+                      title={primary.name}
+                    >
+                      {primary.customName?.trim() || primary.name}
                     </div>
                     <div className="text-[10px] text-zinc-400 truncate">
                       {primary.channels?.[dmxCh - primary.startChannel] ||

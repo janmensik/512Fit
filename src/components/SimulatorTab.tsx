@@ -128,7 +128,16 @@ export function SimulatorTab({
                     key={fixNum}
                     type="button"
                     disabled={!occ.isUsed && !isSelected}
-                    onClick={() => onSelectFixture(fixNum)}
+                    onClick={() => {
+                      onSelectFixture(fixNum);
+                      if (controller.hasABSwitch) {
+                        if (selectedPage === 'A' && !occ.hasPageA && occ.hasPageB) {
+                          onSelectPage('B');
+                        } else if (selectedPage === 'B' && !occ.hasPageB && occ.hasPageA) {
+                          onSelectPage('A');
+                        }
+                      }
+                    }}
                     className={`flex flex-col items-center justify-center rounded-xl p-2.5 transition-all ${
                       isSelected
                         ? 'border-2 border-amber-400 bg-amber-500/25 text-amber-50 ring-2 ring-amber-400/50 shadow-lg shadow-amber-500/20'
@@ -204,13 +213,14 @@ export function SimulatorTab({
                   <button
                     key={page}
                     type="button"
+                    disabled={!hasLights && !active}
                     onClick={() => onSelectPage(page)}
-                    className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-bold transition-colors ${
+                    className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all ${
                       active
-                        ? 'bg-sky-500 text-zinc-950'
+                        ? 'border-2 border-sky-400 bg-sky-500/25 text-sky-50 ring-2 ring-sky-400/50'
                         : hasLights
-                        ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/25'
-                        : 'text-zinc-500 opacity-40 hover:opacity-80 hover:text-zinc-300'
+                        ? 'border-2 border-emerald-500 bg-emerald-950/70 text-emerald-100 shadow-md shadow-emerald-500/10 hover:bg-emerald-900/70'
+                        : 'border border-dashed border-zinc-800/80 bg-zinc-950/30 text-zinc-700 opacity-35 cursor-not-allowed'
                     }`}
                   >
                     {hasLights && !active && (
@@ -219,16 +229,18 @@ export function SimulatorTab({
                     <span>
                       Page {page} (Ch {rangeStart}–{rangeEnd})
                     </span>
-                    {hasLights && (
+                    {hasLights ? (
                       <span
                         className={`rounded px-1.5 py-0.5 text-[10px] ${
                           active
-                            ? 'bg-zinc-950/20 text-zinc-950'
-                            : 'bg-emerald-500/20 text-emerald-200'
+                            ? 'bg-sky-400 text-zinc-950'
+                            : 'bg-emerald-500 text-zinc-950'
                         }`}
                       >
                         {count}
                       </span>
+                    ) : (
+                      <span className="text-[10px] font-normal">(Empty)</span>
                     )}
                   </button>
                 );

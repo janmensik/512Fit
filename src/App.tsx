@@ -151,6 +151,46 @@ export function App() {
     setStrategyNote(`${result.strategyUsed} — ${result.notes[0] || ''}`);
   };
 
+  const handleAddPosition = (pos: string) => {
+    const trimmed = pos.trim();
+    if (!trimmed) return;
+    updateActiveScene((s) => {
+      if (s.positions.some((p) => p.toLowerCase() === trimmed.toLowerCase())) {
+        return s;
+      }
+      return { ...s, positions: [...s.positions, trimmed] };
+    });
+  };
+
+  const handleRenamePosition = (oldName: string, newName: string) => {
+    const trimmed = newName.trim();
+    if (!trimmed || trimmed === oldName) return;
+    updateActiveScene((s) => {
+      const exists = s.positions.some((p) => p !== oldName && p.toLowerCase() === trimmed.toLowerCase());
+      const nextPositions = exists
+        ? s.positions.filter((p) => p !== oldName)
+        : s.positions.map((p) => (p === oldName ? trimmed : p));
+      return {
+        ...s,
+        positions: nextPositions,
+        lights: s.lights.map((l) => (l.position === oldName ? { ...l, position: trimmed } : l)),
+      };
+    });
+  };
+
+  const handleDeletePosition = (name: string) => {
+    updateActiveScene((s) => {
+      if (s.positions.length <= 1) return s;
+      const nextPositions = s.positions.filter((p) => p !== name);
+      const fallback = nextPositions[0];
+      return {
+        ...s,
+        positions: nextPositions,
+        lights: s.lights.map((l) => (l.position === name ? { ...l, position: fallback } : l)),
+      };
+    });
+  };
+
   const handleInspectInSimulator = (light: SceneLightInstance) => {
     const mapping = mapChannelRangeToController(
       light.startChannel,
@@ -284,12 +324,9 @@ export function App() {
             onSaveLightToCatalog={(light) =>
               setCustomLights((prev) => [...prev, light])
             }
-            onAddPosition={(pos) =>
-              updateActiveScene((s) => ({
-                ...s,
-                positions: [...s.positions, pos],
-              }))
-            }
+            onAddPosition={handleAddPosition}
+            onRenamePosition={handleRenamePosition}
+            onDeletePosition={handleDeletePosition}
           />
         )}
 

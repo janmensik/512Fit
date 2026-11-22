@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   AlertTriangle,
+  Check,
   Lock,
+  Pencil,
   Plus,
   Sparkles,
+  Tags,
   Trash2,
   Unlock,
+  X,
 } from 'lucide-react';
 import type {
   CatalogLight,
@@ -31,6 +35,8 @@ interface LightsChannelsTabProps {
   onAutoRecommend: () => void;
   onSaveLightToCatalog: (light: CatalogLight) => void;
   onAddPosition: (pos: string) => void;
+  onRenamePosition: (oldName: string, newName: string) => void;
+  onDeletePosition: (name: string) => void;
 }
 
 export function LightsChannelsTab({
@@ -46,12 +52,26 @@ export function LightsChannelsTab({
   onAutoRecommend,
   onSaveLightToCatalog,
   onAddPosition,
+  onRenamePosition,
+  onDeletePosition,
 }: LightsChannelsTabProps) {
   const [selectedCatalogId, setSelectedCatalogId] = useState(catalogLights[0]?.id || '');
   const [selectedModeId, setSelectedModeId] = useState(catalogLights[0]?.modes?.[0]?.id || '');
   const [addPosition, setAddPosition] = useState(positions[0] || 'Front');
   const [customPosInput, setCustomPosInput] = useState('');
   const [quantity, setQuantity] = useState(1);
+
+  // Position manager state
+  const [showPositionManager, setShowPositionManager] = useState(false);
+  const [newPositionName, setNewPositionName] = useState('');
+  const [editingPos, setEditingPos] = useState<string | null>(null);
+  const [editingPosValue, setEditingPosValue] = useState('');
+
+  useEffect(() => {
+    if (!positions.includes(addPosition) && positions.length > 0) {
+      setAddPosition(positions[0]);
+    }
+  }, [positions, addPosition]);
 
   // Custom light form state
   const [showCustomForm, setShowCustomForm] = useState(false);
@@ -162,14 +182,156 @@ export function LightsChannelsTab({
       <section className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4 sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <h2 className="text-base font-semibold text-zinc-100">3. Add Lights to Scene</h2>
-          <button
-            type="button"
-            onClick={() => setShowCustomForm(!showCustomForm)}
-            className="text-xs font-medium text-amber-400 hover:text-amber-300"
-          >
-            {showCustomForm ? '← Pick from Catalog' : '+ Create Custom Light'}
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setShowPositionManager(!showPositionManager)}
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-sky-400 hover:text-sky-300"
+            >
+              <Tags className="h-3.5 w-3.5" aria-hidden="true" />
+              {showPositionManager ? 'Hide Positions' : 'Manage Positions'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowCustomForm(!showCustomForm)}
+              className="text-xs font-medium text-amber-400 hover:text-amber-300"
+            >
+              {showCustomForm ? '← Pick from Catalog' : '+ Create Custom Light'}
+            </button>
+          </div>
         </div>
+
+        {showPositionManager && (
+          <div className="mb-5 rounded-xl border border-zinc-800 bg-zinc-950/70 p-3.5 space-y-3">
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-300">
+                Position Labels
+              </h3>
+              <span className="text-[11px] text-zinc-500">
+                Rename or delete labels (lights are updated automatically)
+              </span>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              <input
+                type="text"
+                aria-label="New position label"
+                value={newPositionName}
+                onChange={(e) => setNewPositionName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && newPositionName.trim()) {
+                    e.preventDefault();
+                    onAddPosition(newPositionName.trim());
+                    setAddPosition(newPositionName.trim());
+                    setNewPositionName('');
+                  }
+                }}
+                placeholder="New position (e.g. Truss, DJ Booth)"
+                className="flex-1 min-w-[180px] rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-amber-500 focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  if (!newPositionName.trim()) return;
+                  onAddPosition(newPositionName.trim());
+                  setAddPosition(newPositionName.trim());
+                  setNewPositionName('');
+                }}
+                className="inline-flex items-center gap-1 rounded-lg bg-sky-500 px-3 py-1.5 text-xs font-semibold text-zinc-950 hover:bg-sky-400"
+              >
+                <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+                Add Position
+              </button>
+            </div>
+
+            <div className="flex flex-wrap gap-2 pt-1">
+              {positions.map((pos) => {
+                const count = lights.filter((l) => l.position === pos).length;
+                const posColor = getPositionColor(pos, positions);
+                const isEditing = editingPos === pos;
+
+                if (isEditing) {
+                  return (
+                    <div
+                      key={pos}
+                      className="inline-flex items-center gap-1 rounded-lg border border-amber-500/50 bg-zinc-900 px-2 py-1"
+                    >
+                      <input
+                        type="text"
+                        aria-label={`Rename position ${pos}`}
+                        value={editingPosValue}
+                        onChange={(e) => setEditingPosValue(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            onRenamePosition(pos, editingPosValue);
+                            setEditingPos(null);
+                          } else if (e.key === 'Escape') {
+                            setEditingPos(null);
+                          }
+                        }}
+                        className="w-28 bg-transparent text-xs font-medium text-zinc-100 focus:outline-none"
+                        autoFocus
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onRenamePosition(pos, editingPosValue);
+                          setEditingPos(null);
+                        }}
+                        aria-label="Save position name"
+                        className="rounded p-1 text-emerald-400 hover:bg-zinc-800"
+                      >
+                        <Check className="h-3.5 w-3.5" aria-hidden="true" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setEditingPos(null)}
+                        aria-label="Cancel rename"
+                        className="rounded p-1 text-zinc-400 hover:bg-zinc-800"
+                      >
+                        <X className="h-3.5 w-3.5" aria-hidden="true" />
+                      </button>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div
+                    key={pos}
+                    className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs ${posColor.bg} ${posColor.border} ${posColor.text}`}
+                  >
+                    <span className="font-semibold">{pos}</span>
+                    <span className="opacity-70">({count})</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingPos(pos);
+                        setEditingPosValue(pos);
+                      }}
+                      title={`Rename ${pos}`}
+                      aria-label={`Rename ${pos}`}
+                      className="ml-1 rounded p-0.5 hover:bg-black/20"
+                    >
+                      <Pencil className="h-3 w-3" aria-hidden="true" />
+                    </button>
+                    {positions.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => onDeletePosition(pos)}
+                        title={`Delete ${pos}`}
+                        aria-label={`Delete ${pos}`}
+                        className="rounded p-0.5 hover:bg-black/20 text-rose-300"
+                      >
+                        <Trash2 className="h-3 w-3" aria-hidden="true" />
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {!showCustomForm ? (
           <form onSubmit={handleAddFromCatalog} className="grid gap-3 sm:grid-cols-12 items-end">

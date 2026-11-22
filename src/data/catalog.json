@@ -195,6 +195,15 @@
       "isFactory": true
     },
     {
+      "id": "light-generic-1ch-par",
+      "name": "Generic 1-channel LED Par",
+      "channelCount": 1,
+      "profileLabel": "1ch - Dimmer",
+      "defaultFixedStartChannel": null,
+      "isFactory": true,
+      "channels": ["Dimmer"]
+    },
+    {
       "id": "light-dimmer-1ch",
       "name": "Dimmer Pack Channel (1ch)",
       "channelCount": 1,

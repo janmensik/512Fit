@@ -102,7 +102,7 @@ export function SetupControllerTab({
         </div>
 
         <div className="space-y-5">
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1.5 min-w-0">
             <label htmlFor="controller-preset" className="text-xs font-medium text-zinc-300">
               Select Saved / Factory Controller
             </label>
@@ -110,7 +110,7 @@ export function SetupControllerTab({
               id="controller-preset"
               value={activeController.id}
               onChange={(e) => onSelectController(e.target.value)}
-              className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none"
+              className="w-full max-w-full min-w-0 truncate rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-base sm:text-sm text-zinc-100 focus:border-amber-500 focus:outline-none"
             >
               {controllers.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -189,8 +189,8 @@ export function SetupControllerTab({
             {activeController.slidersPerPage * pages} ch each)
           </div>
 
-          <form onSubmit={handleSaveAsPreset} className="flex flex-wrap items-end gap-2 pt-2 border-t border-zinc-800">
-            <div className="flex-1 min-w-[200px] flex flex-col gap-1.5">
+          <form onSubmit={handleSaveAsPreset} className="flex flex-col sm:flex-row sm:items-end gap-2 pt-2 border-t border-zinc-800">
+            <div className="w-full sm:flex-1 min-w-0 flex flex-col gap-1.5">
               <label htmlFor="save-ctrl-name" className="text-xs font-medium text-zinc-400">
                 Save current controller settings as a reusable preset
               </label>
@@ -200,12 +200,12 @@ export function SetupControllerTab({
                 value={newCtrlName}
                 onChange={(e) => setNewCtrlName(e.target.value)}
                 placeholder="e.g. My 192ch Stairville Console"
-                className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-amber-500 focus:outline-none"
+                className="w-full min-w-0 rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-base sm:text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-amber-500 focus:outline-none"
               />
             </div>
             <button
               type="submit"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-amber-400"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-amber-400"
             >
               <Save className="h-4 w-4" aria-hidden="true" />
               Save Controller

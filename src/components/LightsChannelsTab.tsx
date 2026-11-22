@@ -191,10 +191,10 @@ export function LightsChannelsTab({
   return (
     <div className="space-y-6">
       {/* Add Lights Section */}
-      <section className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-4 sm:p-5">
+      <section className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-3.5 sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <h2 className="text-base font-semibold text-zinc-100">3. Add Lights to Scene</h2>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <button
               type="button"
               onClick={() => setShowPositionManager(!showPositionManager)}
@@ -239,7 +239,7 @@ export function LightsChannelsTab({
                   }
                 }}
                 placeholder="New position (e.g. Truss, DJ Booth)"
-                className="flex-1 min-w-[180px] rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-amber-500 focus:outline-none"
+                className="flex-1 min-w-0 rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-base sm:text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-amber-500 focus:outline-none"
               />
               <button
                 type="button"
@@ -346,8 +346,8 @@ export function LightsChannelsTab({
         )}
 
         {!showCustomForm ? (
-          <form onSubmit={handleAddFromCatalog} className="grid gap-3 sm:grid-cols-12 items-end">
-            <div className="sm:col-span-5 flex flex-col gap-1.5">
+          <form onSubmit={handleAddFromCatalog} className="grid grid-cols-1 gap-3 sm:grid-cols-12 items-end">
+            <div className="sm:col-span-5 flex flex-col gap-1.5 min-w-0">
               <label htmlFor="catalog-light-select" className="text-xs font-medium text-zinc-300">
                 Light / Dimmer
               </label>
@@ -360,7 +360,7 @@ export function LightsChannelsTab({
                   const next = catalogLights.find((c) => c.id === newId);
                   setSelectedModeId(next?.modes?.[0]?.id || '');
                 }}
-                className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none"
+                className="w-full max-w-full min-w-0 truncate rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-base sm:text-sm text-zinc-100 focus:border-amber-500 focus:outline-none"
               >
                 {catalogLights.map((l) => (
                   <option key={l.id} value={l.id}>
@@ -372,7 +372,7 @@ export function LightsChannelsTab({
             </div>
 
             {selectedTemplate?.modes && selectedTemplate.modes.length > 1 && (
-              <div className="sm:col-span-12 flex flex-col gap-1.5">
+              <div className="sm:col-span-12 flex flex-col gap-1.5 min-w-0">
                 <label htmlFor="catalog-mode-select" className="text-xs font-medium text-amber-300">
                   DMX Channel Mode ({selectedTemplate.name})
                 </label>
@@ -380,7 +380,7 @@ export function LightsChannelsTab({
                   id="catalog-mode-select"
                   value={selectedMode?.id || ''}
                   onChange={(e) => setSelectedModeId(e.target.value)}
-                  className="rounded-lg border border-amber-500/40 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none"
+                  className="w-full max-w-full min-w-0 truncate rounded-lg border border-amber-500/40 bg-zinc-950 px-3 py-2 text-base sm:text-sm text-zinc-100 focus:border-amber-500 focus:outline-none"
                 >
                   {selectedTemplate.modes.map((m) => (
                     <option key={m.id} value={m.id}>
@@ -391,7 +391,7 @@ export function LightsChannelsTab({
               </div>
             )}
 
-            <div className="sm:col-span-3 flex flex-col gap-1.5">
+            <div className="sm:col-span-3 flex flex-col gap-1.5 min-w-0">
               <label htmlFor="add-position-select" className="text-xs font-medium text-zinc-300">
                 Position Label
               </label>
@@ -399,7 +399,7 @@ export function LightsChannelsTab({
                 id="add-position-select"
                 value={addPosition}
                 onChange={(e) => setAddPosition(e.target.value)}
-                className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none"
+                className="w-full max-w-full min-w-0 truncate rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-base sm:text-sm text-zinc-100 focus:border-amber-500 focus:outline-none"
               >
                 {positions.map((p) => (
                   <option key={p} value={p}>
@@ -409,7 +409,7 @@ export function LightsChannelsTab({
               </select>
             </div>
 
-            <div className="sm:col-span-2 flex flex-col gap-1.5">
+            <div className="sm:col-span-2 flex flex-col gap-1.5 min-w-0">
               <label htmlFor="add-qty" className="text-xs font-medium text-zinc-300">
                 Qty
               </label>
@@ -421,11 +421,11 @@ export function LightsChannelsTab({
                 max={24}
                 value={quantity}
                 onChange={(e) => setQuantity(Math.max(1, Math.min(24, Number(e.target.value) || 1)))}
-                className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none"
+                className="w-full min-w-0 rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-base sm:text-sm text-zinc-100 focus:border-amber-500 focus:outline-none"
               />
             </div>
 
-            <div className="sm:col-span-2">
+            <div className="sm:col-span-2 min-w-0">
               <button
                 type="submit"
                 className="w-full inline-flex items-center justify-center gap-1.5 rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-zinc-950 hover:bg-amber-400"
@@ -435,8 +435,8 @@ export function LightsChannelsTab({
               </button>
             </div>
 
-            <div className="sm:col-span-12 flex flex-wrap items-center gap-4 pt-1">
-              <div className="flex-1 min-w-[200px]">
+            <div className="sm:col-span-12 flex flex-wrap items-center gap-3 pt-1 min-w-0">
+              <div className="w-full sm:flex-1 min-w-0">
                 <label htmlFor="catalog-custom-name" className="sr-only">
                   Custom Name / Note (optional)
                 </label>
@@ -446,7 +446,7 @@ export function LightsChannelsTab({
                   value={catalogCustomName}
                   onChange={(e) => setCatalogCustomName(e.target.value)}
                   placeholder="Custom name / note (optional, e.g. Drum Spot)"
-                  className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-1.5 text-xs text-zinc-100 placeholder:text-zinc-600 focus:border-amber-500 focus:outline-none"
+                  className="w-full min-w-0 rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-base sm:text-xs text-zinc-100 placeholder:text-zinc-600 focus:border-amber-500 focus:outline-none"
                 />
               </div>
               <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
@@ -663,57 +663,75 @@ export function LightsChannelsTab({
               return (
                 <div
                   key={light.instanceId}
-                  className={`rounded-xl border p-3.5 transition-colors ${
+                  className={`rounded-xl border p-3.5 sm:p-4 space-y-3 transition-colors ${
                     isErr
                       ? 'border-rose-500/60 bg-rose-950/20'
                       : 'border-zinc-800 bg-zinc-900/70'
                   }`}
                 >
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div className="space-y-1 min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
+                  {/* Top Row: Badges, Readable Title & Delete */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0 flex-1 space-y-1.5">
+                      <div className="flex flex-wrap items-center gap-1.5">
                         <span
                           className={`inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-semibold ${posColor.bg} ${posColor.border} ${posColor.text}`}
                         >
                           {light.position}
                         </span>
-                        <span className="font-semibold text-zinc-100 text-sm truncate">
-                          {light.customName?.trim() || light.name}
-                        </span>
-                        {light.customName?.trim() && (
-                          <span className="text-xs text-zinc-500 truncate">
-                            {light.name}
-                          </span>
-                        )}
-                        <span className="text-xs text-zinc-400">({light.profileLabel})</span>
-                        {light.isFixed && (
+                        {(light.isFixed || light.isLocked) && (
                           <span className="rounded bg-zinc-800 px-1.5 py-0.5 text-[11px] font-medium text-zinc-300">
-                            FIXED
+                            {light.isFixed ? 'FIXED' : 'LOCKED'}
                           </span>
                         )}
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-2 text-xs">
-                        <span className="font-mono font-semibold text-amber-300">
-                          DMX {light.channelCount === 1 ? light.startChannel : `${light.startChannel}–${endCh}`}
-                        </span>
-                        <span className="text-zinc-600">/</span>
-                        <span className="text-sky-300 font-medium">{mapping.formattedSummary}</span>
-                        <input
-                          type="text"
-                          aria-label={`Custom name or note for ${light.name}`}
-                          value={light.customName || ''}
-                          onChange={(e) =>
-                            onUpdateLight(light.instanceId, { customName: e.target.value })
-                          }
-                          placeholder="+ Add custom name / note"
-                          className="ml-auto sm:ml-2 rounded border border-zinc-800 bg-zinc-950/70 px-2 py-0.5 text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-amber-500 focus:outline-none"
-                        />
+                      <div className="text-base font-semibold text-zinc-100 leading-snug break-words">
+                        {light.customName?.trim() || light.name}
+                      </div>
+
+                      <div className="text-xs text-zinc-400 break-words">
+                        {light.customName?.trim() ? `${light.name} • ` : ''}
+                        {light.profileLabel}
                       </div>
                     </div>
 
-                    {/* Mobile-friendly channel controls */}
-                    <div className="flex flex-wrap items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => onRemoveLight(light.instanceId)}
+                      aria-label={`Remove ${light.name}`}
+                      className="shrink-0 rounded-lg border border-zinc-800 bg-zinc-950 p-2 text-zinc-400 hover:border-rose-500/40 hover:text-rose-400"
+                    >
+                      <Trash2 className="h-4 w-4" aria-hidden="true" />
+                    </button>
+                  </div>
+
+                  {/* DMX & Controller Readout */}
+                  <div className="flex flex-wrap items-center gap-2 text-xs">
+                    <span className="rounded-md bg-amber-500/15 px-2.5 py-1 font-mono font-bold text-amber-300 ring-1 ring-amber-500/30">
+                      DMX {light.channelCount === 1 ? light.startChannel : `${light.startChannel}–${endCh}`}
+                    </span>
+                    <span className="rounded-md bg-sky-500/15 px-2.5 py-1 font-medium text-sky-300 ring-1 ring-sky-500/30">
+                      {mapping.formattedSummary}
+                    </span>
+                  </div>
+
+                  {/* Custom Name / Note Input */}
+                  <div>
+                    <input
+                      type="text"
+                      aria-label={`Custom name or note for ${light.name}`}
+                      value={light.customName || ''}
+                      onChange={(e) =>
+                        onUpdateLight(light.instanceId, { customName: e.target.value })
+                      }
+                      placeholder="+ Add custom name / note"
+                      className="w-full min-w-0 rounded-lg border border-zinc-800 bg-zinc-950/80 px-3 py-2 text-base sm:text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-amber-500 focus:outline-none"
+                    />
+                  </div>
+
+                  {/* Controls Toolbar */}
+                  <div className="border-t border-zinc-800/80 pt-3 flex flex-col gap-2.5 lg:flex-row lg:items-center lg:justify-between">
+                    <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-2 min-w-0">
                       {(() => {
                         const cat = light.catalogLightId
                           ? catalogLights.find((c) => c.id === light.catalogLightId)
@@ -734,7 +752,7 @@ export function LightsChannelsTab({
                                 });
                               }
                             }}
-                            className="rounded-lg border border-amber-500/40 bg-zinc-950 px-2 py-1 text-xs text-amber-200"
+                            className="w-full sm:w-auto sm:max-w-[240px] min-w-0 truncate rounded-lg border border-amber-500/40 bg-zinc-950 px-2.5 py-1.5 text-base sm:text-xs text-amber-200"
                           >
                             {cat.modes.map((m) => (
                               <option key={m.id} value={m.id}>
@@ -751,7 +769,7 @@ export function LightsChannelsTab({
                         onChange={(e) =>
                           onUpdateLight(light.instanceId, { position: e.target.value })
                         }
-                        className="rounded-lg border border-zinc-700 bg-zinc-950 px-2 py-1 text-xs text-zinc-200"
+                        className="w-full sm:w-auto min-w-0 truncate rounded-lg border border-zinc-700 bg-zinc-950 px-2.5 py-1.5 text-base sm:text-xs text-zinc-200"
                       >
                         {positions.map((p) => (
                           <option key={p} value={p}>
@@ -759,47 +777,51 @@ export function LightsChannelsTab({
                           </option>
                         ))}
                       </select>
+                    </div>
 
-                      <button
-                        type="button"
-                        onClick={() =>
-                          onUpdateLight(light.instanceId, {
-                            startChannel: Math.max(1, light.startChannel - 1),
-                          })
-                        }
-                        aria-label="Decrease DMX channel"
-                        title="Decrease DMX channel"
-                        className="rounded-lg border border-zinc-700 bg-zinc-950 p-1.5 text-zinc-200 hover:bg-zinc-800"
-                      >
-                        <Minus className="h-3.5 w-3.5" aria-hidden="true" />
-                      </button>
-                      <input
-                        type="number"
-                        inputMode="numeric"
-                        aria-label={`DMX start channel for ${light.name}`}
-                        min={1}
-                        max={512}
-                        value={light.startChannel}
-                        onChange={(e) =>
-                          onUpdateLight(light.instanceId, {
-                            startChannel: Math.max(1, Math.min(512, Number(e.target.value) || 1)),
-                          })
-                        }
-                        className="w-16 rounded-lg border border-zinc-700 bg-zinc-950 px-2 py-1 text-center font-mono text-xs font-bold text-zinc-100"
-                      />
-                      <button
-                        type="button"
-                        onClick={() =>
-                          onUpdateLight(light.instanceId, {
-                            startChannel: Math.min(512, light.startChannel + 1),
-                          })
-                        }
-                        aria-label="Increase DMX channel"
-                        title="Increase DMX channel"
-                        className="rounded-lg border border-zinc-700 bg-zinc-950 p-1.5 text-zinc-200 hover:bg-zinc-800"
-                      >
-                        <Plus className="h-3.5 w-3.5" aria-hidden="true" />
-                      </button>
+                    <div className="flex items-center justify-between sm:justify-start gap-2">
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            onUpdateLight(light.instanceId, {
+                              startChannel: Math.max(1, light.startChannel - 1),
+                            })
+                          }
+                          aria-label="Decrease DMX channel"
+                          title="Decrease DMX channel"
+                          className="inline-flex items-center justify-center rounded-lg border border-zinc-700 bg-zinc-950 h-11 w-11 sm:h-8 sm:w-8 text-zinc-200 hover:bg-zinc-800"
+                        >
+                          <Minus className="h-4 w-4 sm:h-3.5 sm:w-3.5" aria-hidden="true" />
+                        </button>
+                        <input
+                          type="number"
+                          inputMode="numeric"
+                          aria-label={`DMX start channel for ${light.name}`}
+                          min={1}
+                          max={512}
+                          value={light.startChannel}
+                          onChange={(e) =>
+                            onUpdateLight(light.instanceId, {
+                              startChannel: Math.max(1, Math.min(512, Number(e.target.value) || 1)),
+                            })
+                          }
+                          className="w-20 sm:w-16 rounded-lg border border-zinc-700 bg-zinc-950 px-2 py-1.5 text-center font-mono text-base sm:text-xs font-bold text-zinc-100"
+                        />
+                        <button
+                          type="button"
+                          onClick={() =>
+                            onUpdateLight(light.instanceId, {
+                              startChannel: Math.min(512, light.startChannel + 1),
+                            })
+                          }
+                          aria-label="Increase DMX channel"
+                          title="Increase DMX channel"
+                          className="inline-flex items-center justify-center rounded-lg border border-zinc-700 bg-zinc-950 h-11 w-11 sm:h-8 sm:w-8 text-zinc-200 hover:bg-zinc-800"
+                        >
+                          <Plus className="h-4 w-4 sm:h-3.5 sm:w-3.5" aria-hidden="true" />
+                        </button>
+                      </div>
 
                       <button
                         type="button"
@@ -818,7 +840,7 @@ export function LightsChannelsTab({
                         aria-label={
                           light.isFixed || light.isLocked ? 'Unlock channel' : 'Lock channel'
                         }
-                        className={`rounded-lg border p-1.5 ${
+                        className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 sm:p-1.5 text-xs font-medium ${
                           light.isFixed || light.isLocked
                             ? 'border-amber-500/50 bg-amber-500/15 text-amber-300'
                             : 'border-zinc-700 bg-zinc-950 text-zinc-400 hover:text-zinc-200'
@@ -829,15 +851,9 @@ export function LightsChannelsTab({
                         ) : (
                           <Unlock className="h-3.5 w-3.5" aria-hidden="true" />
                         )}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => onRemoveLight(light.instanceId)}
-                        aria-label={`Remove ${light.name}`}
-                        className="rounded-lg border border-zinc-800 bg-zinc-950 p-1.5 text-zinc-400 hover:border-rose-500/40 hover:text-rose-400"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                        <span className="sm:hidden">
+                          {light.isFixed || light.isLocked ? 'Locked' : 'Auto'}
+                        </span>
                       </button>
                     </div>
                   </div>

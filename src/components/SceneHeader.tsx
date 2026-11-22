@@ -25,7 +25,7 @@ export function SceneHeader({
 
   return (
     <header className="sticky top-0 z-30 border-b border-zinc-800 bg-zinc-950/95 backdrop-blur supports-[backdrop-filter]:bg-zinc-950/80">
-      <div className="flex w-full flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-3">
+      <div className="flex w-full flex-wrap items-center justify-between gap-2.5 px-3 sm:px-6 py-2.5 sm:py-3">
         <div className="flex items-center gap-2.5">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/30">
             <Sliders className="h-5 w-5" aria-hidden="true" />
@@ -38,7 +38,7 @@ export function SceneHeader({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex w-full sm:w-auto items-center gap-2 min-w-0">
           <label htmlFor="scene-select" className="sr-only">
             Active Scene
           </label>
@@ -46,7 +46,7 @@ export function SceneHeader({
             id="scene-select"
             value={activeScene.id}
             onChange={(e) => onSelectScene(e.target.value)}
-            className="rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-sm font-medium text-zinc-100 focus:border-amber-500 focus:outline-none"
+            className="flex-1 min-w-0 max-w-full truncate rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-base sm:text-sm font-medium text-zinc-100 focus:border-amber-500 focus:outline-none"
           >
             {scenes.map((s) => (
               <option key={s.id} value={s.id}>
@@ -59,7 +59,7 @@ export function SceneHeader({
             type="button"
             onClick={onNewScene}
             title="Create new scene"
-            className="inline-flex items-center gap-1 rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-1.5 text-xs font-medium text-zinc-200 hover:bg-zinc-800"
+            className="shrink-0 inline-flex items-center gap-1 rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-2 sm:py-1.5 text-xs font-medium text-zinc-200 hover:bg-zinc-800"
           >
             <Plus className="h-4 w-4" aria-hidden="true" />
             <span className="hidden sm:inline">New</span>
@@ -69,7 +69,7 @@ export function SceneHeader({
             type="button"
             onClick={onDuplicateScene}
             title="Duplicate current scene"
-            className="inline-flex items-center gap-1 rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-1.5 text-xs font-medium text-zinc-200 hover:bg-zinc-800"
+            className="shrink-0 inline-flex items-center gap-1 rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-2 sm:py-1.5 text-xs font-medium text-zinc-200 hover:bg-zinc-800"
           >
             <Copy className="h-4 w-4" aria-hidden="true" />
             <span className="hidden sm:inline">Copy</span>
@@ -78,10 +78,11 @@ export function SceneHeader({
           <button
             type="button"
             onClick={onOpenStorageModal}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-100 hover:bg-zinc-700 ring-1 ring-zinc-700"
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-zinc-800 px-2.5 sm:px-3 py-2 sm:py-1.5 text-xs font-medium text-zinc-100 hover:bg-zinc-700 ring-1 ring-zinc-700"
           >
             <Download className="h-4 w-4" aria-hidden="true" />
-            <span>JSON / Save</span>
+            <span className="hidden xs:inline sm:inline">JSON</span>
+            <span className="hidden sm:inline">/ Save</span>
           </button>
         </div>
       </div>

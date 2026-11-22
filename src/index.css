@@ -11,11 +11,24 @@
 }
 
 html {
-  scroll-padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+  scroll-padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
 }
 
 body {
   overflow-wrap: break-word;
+}
+
+@layer base {
+  select,
+  input:not([type="checkbox"], [type="radio"]),
+  textarea {
+    max-inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  select {
+    text-overflow: ellipsis;
+  }
 }
 
 :where(button, select, textarea, input:not([type="checkbox"], [type="radio"])) {

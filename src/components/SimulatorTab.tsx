@@ -94,7 +94,7 @@ export function SimulatorTab({
       </div>
 
       {/* Hardware Console Deck */}
-      <div className="rounded-2xl border-2 border-zinc-800 bg-zinc-900 p-4 sm:p-5 shadow-2xl space-y-5">
+      <div className="rounded-2xl border-2 border-zinc-800 bg-zinc-900 p-3 sm:p-5 shadow-2xl space-y-5">
         {/* Top Row: Fixture Buttons */}
         {controller.fixtureCount > 1 && (
           <div>
@@ -198,7 +198,7 @@ export function SimulatorTab({
             <div className="text-xs font-semibold text-zinc-300">
               Page Select (Fixture {selectedFixture})
             </div>
-            <div className="inline-flex rounded-xl border border-zinc-700 bg-zinc-950 p-1 gap-1">
+            <div className="grid grid-cols-2 w-full sm:w-auto sm:inline-flex rounded-xl border border-zinc-700 bg-zinc-950 p-1 gap-1">
               {(['A', 'B'] as const).map((page) => {
                 const active = selectedPage === page;
                 const count =
@@ -215,7 +215,7 @@ export function SimulatorTab({
                     type="button"
                     disabled={!hasLights && !active}
                     onClick={() => onSelectPage(page)}
-                    className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-bold transition-all ${
+                    className={`inline-flex flex-wrap items-center justify-center gap-1.5 rounded-lg px-2 py-2 sm:px-3.5 sm:py-1.5 text-xs font-bold transition-all min-w-0 ${
                       active
                         ? 'border-2 border-sky-400 bg-sky-500/25 text-sky-50 ring-2 ring-sky-400/50'
                         : hasLights

@@ -224,7 +224,7 @@ export function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 pb-24 sm:pb-12">
+    <div className="min-h-dvh w-full bg-zinc-950 text-zinc-100 pb-28 sm:pb-12">
       <SceneHeader
         scenes={scenes}
         activeScene={activeScene}
@@ -263,7 +263,7 @@ export function App() {
       </nav>
 
       {/* Main Content */}
-      <main className="w-full px-4 sm:px-6 py-6">
+      <main className="w-full px-3 sm:px-6 py-4 sm:py-6">
         {activeTab === 'setup' && (
           <SetupControllerTab
             activeScene={activeScene}
@@ -357,7 +357,7 @@ export function App() {
       {/* Mobile Bottom Navigation */}
       <nav
         aria-label="Mobile navigation"
-        className="fixed bottom-0 left-0 right-0 z-40 border-t border-zinc-800 bg-zinc-950/95 backdrop-blur sm:hidden print:hidden"
+        className="fixed bottom-0 inset-x-0 z-50 w-full border-t border-zinc-800 bg-zinc-950/95 backdrop-blur sm:hidden print:hidden"
         style={{
           paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom, 0px))',
         }}
@@ -370,8 +370,8 @@ export function App() {
                 key={id}
                 type="button"
                 onClick={() => setActiveTab(id)}
-                className={`flex flex-col items-center justify-center gap-1 py-2 text-[11px] font-medium ${
-                  active ? 'text-amber-400' : 'text-zinc-400'
+                className={`flex flex-col items-center justify-center gap-1 py-2.5 text-[11px] font-semibold transition-colors ${
+                  active ? 'text-amber-400 bg-amber-500/10' : 'text-zinc-400'
                 }`}
               >
                 <Icon className="h-5 w-5" aria-hidden="true" />

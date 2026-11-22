@@ -112,7 +112,7 @@ export function CheatsheetTab({
                         className="p-3.5 hover:bg-zinc-800/40 transition-colors"
                       >
                         <div className="flex items-start justify-between gap-2">
-                          <div className="space-y-1">
+                          <div className="min-w-0 flex-1 space-y-1">
                             <div className="flex flex-wrap items-center gap-1.5">
                               <span className="font-semibold text-zinc-100 text-sm">
                                 {light.customName?.trim() || light.name}
@@ -157,7 +157,7 @@ export function CheatsheetTab({
                             type="button"
                             onClick={() => onInspectInSimulator(light)}
                             title="Show on Controller Simulator"
-                            className="inline-flex items-center gap-1 rounded-lg border border-zinc-700 bg-zinc-950 px-2.5 py-1.5 text-xs font-medium text-zinc-300 hover:border-amber-500/50 hover:text-amber-300 print:hidden"
+                            className="shrink-0 inline-flex items-center gap-1 rounded-lg border border-zinc-700 bg-zinc-950 px-2.5 py-1.5 text-xs font-medium text-zinc-300 hover:border-amber-500/50 hover:text-amber-300 print:hidden"
                           >
                             <Eye className="h-3.5 w-3.5" aria-hidden="true" />
                             <span className="hidden sm:inline">Console</span>
@@ -165,7 +165,7 @@ export function CheatsheetTab({
                         </div>
 
                         {showDip && (
-                          <div className="mt-2.5 flex items-center gap-1.5 pt-2 border-t border-zinc-800/60">
+                          <div className="mt-2.5 flex flex-wrap items-center gap-1.5 pt-2 border-t border-zinc-800/60">
                             <span className="text-[10px] font-medium text-zinc-500 uppercase mr-1">
                               DIP
                             </span>

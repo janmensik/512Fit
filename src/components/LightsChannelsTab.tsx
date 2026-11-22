@@ -3,6 +3,7 @@ import {
   AlertTriangle,
   Check,
   Lock,
+  Minus,
   Pencil,
   Plus,
   Sparkles,
@@ -767,9 +768,10 @@ export function LightsChannelsTab({
                           })
                         }
                         aria-label="Decrease DMX channel"
-                        className="rounded-lg border border-zinc-700 bg-zinc-950 px-2.5 py-1 text-xs font-bold text-zinc-200 hover:bg-zinc-800"
+                        title="Decrease DMX channel"
+                        className="rounded-lg border border-zinc-700 bg-zinc-950 p-1.5 text-zinc-200 hover:bg-zinc-800"
                       >
-                        -1
+                        <Minus className="h-3.5 w-3.5" aria-hidden="true" />
                       </button>
                       <input
                         type="number"
@@ -793,9 +795,10 @@ export function LightsChannelsTab({
                           })
                         }
                         aria-label="Increase DMX channel"
-                        className="rounded-lg border border-zinc-700 bg-zinc-950 px-2.5 py-1 text-xs font-bold text-zinc-200 hover:bg-zinc-800"
+                        title="Increase DMX channel"
+                        className="rounded-lg border border-zinc-700 bg-zinc-950 p-1.5 text-zinc-200 hover:bg-zinc-800"
                       >
-                        +1
+                        <Plus className="h-3.5 w-3.5" aria-hidden="true" />
                       </button>
 
                       <button

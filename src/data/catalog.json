@@ -9,11 +9,19 @@
       "isFactory": true
     },
     {
-      "id": "ctrl-384-12fix-ab",
-      "name": "384ch DMX Console (16 Sliders, A/B Page, 12 Fixtures)",
+      "id": "ctrl-beamz-dmx-384",
+      "name": "BeamZ DMX-384 (16 Sliders, A/B Page, 12 Fixtures)",
       "slidersPerPage": 16,
       "hasABSwitch": true,
       "fixtureCount": 12,
+      "isFactory": true
+    },
+    {
+      "id": "ctrl-cameo-control-6",
+      "name": "Cameo Control 6 (6 Sliders, No A/B, 1 Fixture)",
+      "slidersPerPage": 6,
+      "hasABSwitch": false,
+      "fixtureCount": 1,
       "isFactory": true
     },
     {
@@ -34,6 +42,142 @@
     }
   ],
   "lights": [
+    {
+      "id": "light-beamz-btk200w",
+      "name": "BeamZ Professional BTK200W",
+      "channelCount": 2,
+      "profileLabel": "2ch - Dimmer, Strobe",
+      "defaultFixedStartChannel": null,
+      "isFactory": true,
+      "channels": ["Dimmer", "Strobe"],
+      "modes": [
+        {
+          "id": "2ch",
+          "name": "2CH Mode",
+          "channelCount": 2,
+          "profileLabel": "2ch - Dimmer, Strobe",
+          "channels": ["Dimmer", "Strobe"]
+        }
+      ]
+    },
+    {
+      "id": "light-beamz-btk050z-3",
+      "name": "BeamZ Professional BTK050Z-3",
+      "channelCount": 3,
+      "profileLabel": "3ch - Dimmer, Color Temp, Strobe",
+      "defaultFixedStartChannel": null,
+      "isFactory": true,
+      "channels": ["Master Dimmer", "Color Temp (WW-CW)", "Strobe"],
+      "modes": [
+        {
+          "id": "2ch",
+          "name": "2CH Mode (WW/CW)",
+          "channelCount": 2,
+          "profileLabel": "2ch - Cool White, Warm White",
+          "channels": ["Cool White", "Warm White"]
+        },
+        {
+          "id": "3ch",
+          "name": "3CH Mode (Dim/CCT/Strobe)",
+          "channelCount": 3,
+          "profileLabel": "3ch - Dimmer, Color Temp, Strobe",
+          "channels": ["Master Dimmer", "Color Temp (WW-CW)", "Strobe"]
+        }
+      ]
+    },
+    {
+      "id": "light-light4me-penta-par-8x12w",
+      "name": "LIGHT4ME Penta PAR 8x12W MKII RGBWA",
+      "channelCount": 8,
+      "profileLabel": "8ch - Dim, R, G, B, W, A, Strobe, Prog",
+      "defaultFixedStartChannel": null,
+      "isFactory": true,
+      "channels": [
+        "Master Dimmer",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Amber",
+        "Strobe / Speed",
+        "Programs / Sound"
+      ],
+      "modes": [
+        {
+          "id": "8ch",
+          "name": "8CH Mode",
+          "channelCount": 8,
+          "profileLabel": "8ch - Dim, R, G, B, W, A, Strobe, Prog",
+          "channels": [
+            "Master Dimmer",
+            "Red",
+            "Green",
+            "Blue",
+            "White",
+            "Amber",
+            "Strobe / Speed",
+            "Programs / Sound"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "light-beamz-bt280",
+      "name": "BeamZ BT280 LED Flat PAR 7x10W RGBAW-UV",
+      "channelCount": 6,
+      "profileLabel": "6ch - R, G, B, W, A, UV",
+      "defaultFixedStartChannel": null,
+      "isFactory": true,
+      "channels": ["Red", "Green", "Blue", "White", "Amber", "UV"],
+      "modes": [
+        {
+          "id": "2ch",
+          "name": "2CH Mode (Dim + Macros)",
+          "channelCount": 2,
+          "profileLabel": "2ch - Dimmer, Color Macros",
+          "channels": ["Master Dimmer", "Color Macros"]
+        },
+        {
+          "id": "3ch",
+          "name": "3CH Mode (RGB)",
+          "channelCount": 3,
+          "profileLabel": "3ch - R, G, B",
+          "channels": ["Red", "Green", "Blue"]
+        },
+        {
+          "id": "4ch",
+          "name": "4CH Mode (Dim/Strobe/Macro/Auto)",
+          "channelCount": 4,
+          "profileLabel": "4ch - Dimmer, Strobe, Macro, Auto/Sound",
+          "channels": ["Master Dimmer", "Strobe", "Color Macros", "Auto / Sound"]
+        },
+        {
+          "id": "6ch",
+          "name": "6CH Mode (RGBAW-UV)",
+          "channelCount": 6,
+          "profileLabel": "6ch - R, G, B, W, A, UV",
+          "channels": ["Red", "Green", "Blue", "White", "Amber", "UV"]
+        },
+        {
+          "id": "10ch",
+          "name": "10CH Mode (Full Control)",
+          "channelCount": 10,
+          "profileLabel": "10ch - Dim, Strobe, RGBAW-UV, Macro, Auto",
+          "channels": [
+            "Master Dimmer",
+            "Strobe",
+            "Red",
+            "Green",
+            "Blue",
+            "White",
+            "Amber",
+            "UV",
+            "Color Macros",
+            "Auto / Sound"
+          ]
+        }
+      ]
+    },
     {
       "id": "light-fixed-rgbw-1",
       "name": "Fixed RGBW LED #1",

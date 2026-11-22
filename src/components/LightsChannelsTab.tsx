@@ -48,6 +48,7 @@ export function LightsChannelsTab({
   onAddPosition,
 }: LightsChannelsTabProps) {
   const [selectedCatalogId, setSelectedCatalogId] = useState(catalogLights[0]?.id || '');
+  const [selectedModeId, setSelectedModeId] = useState(catalogLights[0]?.modes?.[0]?.id || '');
   const [addPosition, setAddPosition] = useState(positions[0] || 'Front');
   const [customPosInput, setCustomPosInput] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -65,15 +66,24 @@ export function LightsChannelsTab({
   const splitIds = new Set(validation.pageSplits.map((l) => l.instanceId));
   const outOfRangeIds = new Set(validation.outOfRange.map((l) => l.instanceId));
 
+  const selectedTemplate = catalogLights.find((c) => c.id === selectedCatalogId);
+  const selectedMode =
+    selectedTemplate?.modes?.find((m) => m.id === selectedModeId) ??
+    selectedTemplate?.modes?.[0];
+
   const handleAddFromCatalog = (e: React.FormEvent) => {
     e.preventDefault();
-    const template = catalogLights.find((c) => c.id === selectedCatalogId);
+    const template = selectedTemplate;
     if (!template) return;
 
     const targetPos = customPosInput.trim() || addPosition;
     if (customPosInput.trim() && !positions.includes(customPosInput.trim())) {
       onAddPosition(customPosInput.trim());
     }
+
+    const channelCount = selectedMode?.channelCount ?? template.channelCount;
+    const profileLabel = selectedMode?.profileLabel ?? template.profileLabel;
+    const channels = selectedMode?.channels ?? template.channels;
 
     const instances: SceneLightInstance[] = [];
     for (let i = 0; i < quantity; i++) {
@@ -82,9 +92,11 @@ export function LightsChannelsTab({
       instances.push({
         instanceId: `inst-${Date.now()}-${Math.random().toString(36).slice(2, 7)}-${i}`,
         catalogLightId: template.id,
+        selectedModeId: selectedMode?.id,
         name: `${template.name}${suffix}`,
-        profileLabel: template.profileLabel,
-        channelCount: template.channelCount,
+        profileLabel,
+        channelCount,
+        channels,
         position: targetPos,
         isFixed,
         startChannel: isFixed ? template.defaultFixedStartChannel! : 1,
@@ -168,7 +180,12 @@ export function LightsChannelsTab({
               <select
                 id="catalog-light-select"
                 value={selectedCatalogId}
-                onChange={(e) => setSelectedCatalogId(e.target.value)}
+                onChange={(e) => {
+                  const newId = e.target.value;
+                  setSelectedCatalogId(newId);
+                  const next = catalogLights.find((c) => c.id === newId);
+                  setSelectedModeId(next?.modes?.[0]?.id || '');
+                }}
                 className="rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none"
               >
                 {catalogLights.map((l) => (
@@ -179,6 +196,26 @@ export function LightsChannelsTab({
                 ))}
               </select>
             </div>
+
+            {selectedTemplate?.modes && selectedTemplate.modes.length > 1 && (
+              <div className="sm:col-span-12 flex flex-col gap-1.5">
+                <label htmlFor="catalog-mode-select" className="text-xs font-medium text-amber-300">
+                  DMX Channel Mode ({selectedTemplate.name})
+                </label>
+                <select
+                  id="catalog-mode-select"
+                  value={selectedMode?.id || ''}
+                  onChange={(e) => setSelectedModeId(e.target.value)}
+                  className="rounded-lg border border-amber-500/40 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none"
+                >
+                  {selectedTemplate.modes.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.name} — {m.profileLabel}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div className="sm:col-span-3 flex flex-col gap-1.5">
               <label htmlFor="add-position-select" className="text-xs font-medium text-zinc-300">
@@ -444,6 +481,37 @@ export function LightsChannelsTab({
 
                     {/* Mobile-friendly channel controls */}
                     <div className="flex flex-wrap items-center gap-1.5">
+                      {(() => {
+                        const cat = light.catalogLightId
+                          ? catalogLights.find((c) => c.id === light.catalogLightId)
+                          : undefined;
+                        if (!cat?.modes || cat.modes.length <= 1) return null;
+                        return (
+                          <select
+                            aria-label={`DMX mode for ${light.name}`}
+                            value={light.selectedModeId || cat.modes[0].id}
+                            onChange={(e) => {
+                              const mode = cat.modes!.find((m) => m.id === e.target.value);
+                              if (mode) {
+                                onUpdateLight(light.instanceId, {
+                                  selectedModeId: mode.id,
+                                  channelCount: mode.channelCount,
+                                  profileLabel: mode.profileLabel,
+                                  channels: mode.channels,
+                                });
+                              }
+                            }}
+                            className="rounded-lg border border-amber-500/40 bg-zinc-950 px-2 py-1 text-xs text-amber-200"
+                          >
+                            {cat.modes.map((m) => (
+                              <option key={m.id} value={m.id}>
+                                {m.channelCount}ch ({m.name})
+                              </option>
+                            ))}
+                          </select>
+                        );
+                      })()}
+
                       <select
                         aria-label={`Position for ${light.name}`}
                         value={light.position}

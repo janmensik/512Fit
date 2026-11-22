@@ -7,6 +7,14 @@ export interface ControllerProfile {
   isFactory?: boolean;
 }
 
+export interface LightMode {
+  id: string;
+  name: string;
+  channelCount: number;
+  profileLabel: string;
+  channels?: string[];
+}
+
 export interface CatalogLight {
   id: string;
   name: string;
@@ -14,14 +22,18 @@ export interface CatalogLight {
   profileLabel: string;
   defaultFixedStartChannel: number | null;
   isFactory?: boolean;
+  channels?: string[];
+  modes?: LightMode[];
 }
 
 export interface SceneLightInstance {
   instanceId: string;
   catalogLightId?: string;
+  selectedModeId?: string;
   name: string;
   profileLabel: string;
   channelCount: number;
+  channels?: string[];
   position: string;
   isFixed: boolean;
   isLocked?: boolean;

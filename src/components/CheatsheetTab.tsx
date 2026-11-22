@@ -130,6 +130,22 @@ export function CheatsheetTab({
                                 {mapping.formattedSummary}
                               </span>
                             </div>
+
+                            {light.channels && light.channels.length > 0 && (
+                              <div className="flex flex-wrap gap-1 pt-1">
+                                {light.channels.map((chName, idx) => (
+                                  <span
+                                    key={idx}
+                                    className="rounded bg-zinc-800/80 px-1.5 py-0.5 text-[10px] text-zinc-300"
+                                  >
+                                    <span className="font-mono text-zinc-500">
+                                      {light.startChannel + idx}:
+                                    </span>{' '}
+                                    {chName}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
                           </div>
 
                           <button

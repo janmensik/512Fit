@@ -184,10 +184,11 @@ export function SimulatorTab({
                     <div className="text-[11px] font-semibold text-zinc-100 truncate">
                       {primary.name}
                     </div>
-                    <div className="text-[10px] text-zinc-400">
-                      {primary.channelCount > 1
-                        ? `Ch ${dmxCh - primary.startChannel + 1}/${primary.channelCount}`
-                        : '1ch'}
+                    <div className="text-[10px] text-zinc-400 truncate">
+                      {primary.channels?.[dmxCh - primary.startChannel] ||
+                        (primary.channelCount > 1
+                          ? `Ch ${dmxCh - primary.startChannel + 1}/${primary.channelCount}`
+                          : '1ch')}
                     </div>
                   </div>
                 ) : (

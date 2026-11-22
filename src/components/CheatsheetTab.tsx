@@ -74,7 +74,7 @@ export function CheatsheetTab({
           No lights configured in this scene.
         </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {Array.from(grouped.entries()).map(([pos, items]) => {
             const posColor = getPositionColor(pos, positions);
             const sorted = [...items].sort((a, b) => a.startChannel - b.startChannel);

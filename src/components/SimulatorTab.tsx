@@ -112,7 +112,7 @@ export function SimulatorTab({
                 Hide Empty Fixtures
               </label>
             </div>
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+            <div className="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-12 gap-2">
               {Array.from({ length: controller.fixtureCount }, (_, idx) => {
                 const fixNum = idx + 1;
                 const isSelected = selectedFixture === fixNum;
@@ -250,7 +250,14 @@ export function SimulatorTab({
         )}
 
         {/* Fader Sliders Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2.5">
+        <div
+          className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 xl:grid-cols-[repeat(var(--sliders-per-page),minmax(0,1fr))] gap-2"
+          style={
+            {
+              '--sliders-per-page': Math.min(24, controller.slidersPerPage),
+            } as React.CSSProperties
+          }
+        >
           {sliders.map(({ sliderNum, dmxCh, matchingLights }) => {
             const primary = matchingLights[0];
             const isOverlap = matchingLights.length > 1;

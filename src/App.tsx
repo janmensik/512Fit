@@ -240,7 +240,7 @@ export function App() {
         aria-label="Primary sections"
         className="hidden sm:block border-b border-zinc-800 bg-zinc-950"
       >
-        <div className="mx-auto flex max-w-6xl gap-1 px-4">
+        <div className="flex w-full gap-1 px-4 sm:px-6">
           {navItems.map(({ id, label, icon: Icon }) => {
             const active = activeTab === id;
             return (
@@ -263,7 +263,7 @@ export function App() {
       </nav>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-6xl px-4 py-6">
+      <main className="w-full px-4 sm:px-6 py-6">
         {activeTab === 'setup' && (
           <SetupControllerTab
             activeScene={activeScene}

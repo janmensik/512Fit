@@ -25,7 +25,7 @@ export function SceneHeader({
 
   return (
     <header className="sticky top-0 z-30 border-b border-zinc-800 bg-zinc-950/95 backdrop-blur supports-[backdrop-filter]:bg-zinc-950/80">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
+      <div className="flex w-full flex-wrap items-center justify-between gap-3 px-4 sm:px-6 py-3">
         <div className="flex items-center gap-2.5">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/30">
             <Sliders className="h-5 w-5" aria-hidden="true" />
@@ -86,8 +86,8 @@ export function SceneHeader({
         </div>
       </div>
 
-      <div className="border-t border-zinc-900 bg-zinc-900/50 px-4 py-1.5">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 text-xs">
+      <div className="border-t border-zinc-900 bg-zinc-900/50 px-4 sm:px-6 py-1.5">
+        <div className="flex w-full flex-wrap items-center justify-between gap-2 text-xs">
           <div className="flex items-center gap-3 text-zinc-400">
             <span>
               <strong className="text-zinc-200">{totalLights}</strong> lights

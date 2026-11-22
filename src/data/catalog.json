@@ -179,62 +179,6 @@
       ]
     },
     {
-      "id": "light-fixed-rgbw-1",
-      "name": "Fixed RGBW LED #1",
-      "channelCount": 4,
-      "profileLabel": "4ch - RGBW",
-      "defaultFixedStartChannel": 3,
-      "isFactory": true
-    },
-    {
-      "id": "light-fixed-rgbw-2",
-      "name": "Fixed RGBW LED #2",
-      "channelCount": 4,
-      "profileLabel": "4ch - RGBW",
-      "defaultFixedStartChannel": 7,
-      "isFactory": true
-    },
-    {
-      "id": "light-fixed-rgbw-3",
-      "name": "Fixed RGBW LED #3",
-      "channelCount": 4,
-      "profileLabel": "4ch - RGBW",
-      "defaultFixedStartChannel": 11,
-      "isFactory": true
-    },
-    {
-      "id": "light-fixed-white-1",
-      "name": "Fixed White LED #1",
-      "channelCount": 1,
-      "profileLabel": "1ch - White",
-      "defaultFixedStartChannel": 23,
-      "isFactory": true
-    },
-    {
-      "id": "light-fixed-white-2",
-      "name": "Fixed White LED #2",
-      "channelCount": 1,
-      "profileLabel": "1ch - White",
-      "defaultFixedStartChannel": 24,
-      "isFactory": true
-    },
-    {
-      "id": "light-fixed-white-3",
-      "name": "Fixed White LED #3",
-      "channelCount": 1,
-      "profileLabel": "1ch - White",
-      "defaultFixedStartChannel": 25,
-      "isFactory": true
-    },
-    {
-      "id": "light-fixed-white-4",
-      "name": "Fixed White LED #4",
-      "channelCount": 1,
-      "profileLabel": "1ch - White",
-      "defaultFixedStartChannel": 26,
-      "isFactory": true
-    },
-    {
       "id": "light-hp-2ch",
       "name": "High-Power LED (2ch)",
       "channelCount": 2,

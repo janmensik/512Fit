@@ -60,6 +60,8 @@ export function LightsChannelsTab({
   const [addPosition, setAddPosition] = useState(positions[0] || 'Front');
   const [customPosInput, setCustomPosInput] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const [catalogIsFixed, setCatalogIsFixed] = useState(false);
+  const [catalogFixedStart, setCatalogFixedStart] = useState(1);
 
   // Position manager state
   const [showPositionManager, setShowPositionManager] = useState(false);
@@ -108,7 +110,10 @@ export function LightsChannelsTab({
     const instances: SceneLightInstance[] = [];
     for (let i = 0; i < quantity; i++) {
       const suffix = quantity > 1 ? ` #${i + 1}` : '';
-      const isFixed = template.defaultFixedStartChannel !== null;
+      const isFixed = catalogIsFixed || template.defaultFixedStartChannel !== null;
+      const fixedStart = catalogIsFixed
+        ? Math.min(512, catalogFixedStart + i * channelCount)
+        : template.defaultFixedStartChannel ?? 1;
       instances.push({
         instanceId: `inst-${Date.now()}-${Math.random().toString(36).slice(2, 7)}-${i}`,
         catalogLightId: template.id,
@@ -119,12 +124,13 @@ export function LightsChannelsTab({
         channels,
         position: targetPos,
         isFixed,
-        startChannel: isFixed ? template.defaultFixedStartChannel! : 1,
+        startChannel: isFixed ? fixedStart : 1,
       });
     }
     onAddLights(instances);
     setCustomPosInput('');
     setQuantity(1);
+    setCatalogIsFixed(false);
   };
 
   const handleCreateCustomLight = (e: React.FormEvent) => {
@@ -422,6 +428,37 @@ export function LightsChannelsTab({
                 Add
               </button>
             </div>
+
+            <div className="sm:col-span-12 flex flex-wrap items-center gap-4 pt-1">
+              <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={catalogIsFixed}
+                  onChange={(e) => setCatalogIsFixed(e.target.checked)}
+                  className="h-4 w-4 accent-amber-500"
+                />
+                Fixed / Locked DMX Start Channel (Auto-Recommend will not move it)
+              </label>
+              {catalogIsFixed && (
+                <div className="flex items-center gap-2">
+                  <label htmlFor="catalog-fixed-ch" className="text-xs text-zinc-400">
+                    Start Ch:
+                  </label>
+                  <input
+                    id="catalog-fixed-ch"
+                    type="number"
+                    inputMode="numeric"
+                    min={1}
+                    max={512}
+                    value={catalogFixedStart}
+                    onChange={(e) =>
+                      setCatalogFixedStart(Math.max(1, Math.min(512, Number(e.target.value) || 1)))
+                    }
+                    className="w-20 rounded-lg border border-zinc-700 bg-zinc-950 px-2.5 py-1 text-xs text-zinc-100"
+                  />
+                </div>
+              )}
+            </div>
           </form>
         ) : (
           <form onSubmit={handleCreateCustomLight} className="space-y-4">
@@ -689,68 +726,74 @@ export function LightsChannelsTab({
                         ))}
                       </select>
 
-                      {!light.isFixed && (
-                        <>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              onUpdateLight(light.instanceId, {
-                                startChannel: Math.max(1, light.startChannel - 1),
-                              })
-                            }
-                            aria-label="Decrease DMX channel"
-                            className="rounded-lg border border-zinc-700 bg-zinc-950 px-2.5 py-1 text-xs font-bold text-zinc-200 hover:bg-zinc-800"
-                          >
-                            -1
-                          </button>
-                          <input
-                            type="number"
-                            inputMode="numeric"
-                            aria-label={`DMX start channel for ${light.name}`}
-                            min={1}
-                            max={512}
-                            value={light.startChannel}
-                            onChange={(e) =>
-                              onUpdateLight(light.instanceId, {
-                                startChannel: Math.max(1, Math.min(512, Number(e.target.value) || 1)),
-                              })
-                            }
-                            className="w-16 rounded-lg border border-zinc-700 bg-zinc-950 px-2 py-1 text-center font-mono text-xs font-bold text-zinc-100"
-                          />
-                          <button
-                            type="button"
-                            onClick={() =>
-                              onUpdateLight(light.instanceId, {
-                                startChannel: Math.min(512, light.startChannel + 1),
-                              })
-                            }
-                            aria-label="Increase DMX channel"
-                            className="rounded-lg border border-zinc-700 bg-zinc-950 px-2.5 py-1 text-xs font-bold text-zinc-200 hover:bg-zinc-800"
-                          >
-                            +1
-                          </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onUpdateLight(light.instanceId, {
+                            startChannel: Math.max(1, light.startChannel - 1),
+                          })
+                        }
+                        aria-label="Decrease DMX channel"
+                        className="rounded-lg border border-zinc-700 bg-zinc-950 px-2.5 py-1 text-xs font-bold text-zinc-200 hover:bg-zinc-800"
+                      >
+                        -1
+                      </button>
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        aria-label={`DMX start channel for ${light.name}`}
+                        min={1}
+                        max={512}
+                        value={light.startChannel}
+                        onChange={(e) =>
+                          onUpdateLight(light.instanceId, {
+                            startChannel: Math.max(1, Math.min(512, Number(e.target.value) || 1)),
+                          })
+                        }
+                        className="w-16 rounded-lg border border-zinc-700 bg-zinc-950 px-2 py-1 text-center font-mono text-xs font-bold text-zinc-100"
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onUpdateLight(light.instanceId, {
+                            startChannel: Math.min(512, light.startChannel + 1),
+                          })
+                        }
+                        aria-label="Increase DMX channel"
+                        className="rounded-lg border border-zinc-700 bg-zinc-950 px-2.5 py-1 text-xs font-bold text-zinc-200 hover:bg-zinc-800"
+                      >
+                        +1
+                      </button>
 
-                          <button
-                            type="button"
-                            onClick={() =>
-                              onUpdateLight(light.instanceId, { isLocked: !light.isLocked })
-                            }
-                            title={light.isLocked ? 'Unlock channel' : 'Lock channel'}
-                            aria-label={light.isLocked ? 'Unlock channel' : 'Lock channel'}
-                            className={`rounded-lg border p-1.5 ${
-                              light.isLocked
-                                ? 'border-amber-500/50 bg-amber-500/15 text-amber-300'
-                                : 'border-zinc-700 bg-zinc-950 text-zinc-400 hover:text-zinc-200'
-                            }`}
-                          >
-                            {light.isLocked ? (
-                              <Lock className="h-3.5 w-3.5" aria-hidden="true" />
-                            ) : (
-                              <Unlock className="h-3.5 w-3.5" aria-hidden="true" />
-                            )}
-                          </button>
-                        </>
-                      )}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentlyLocked = Boolean(light.isFixed || light.isLocked);
+                          onUpdateLight(light.instanceId, {
+                            isFixed: !currentlyLocked,
+                            isLocked: !currentlyLocked,
+                          });
+                        }}
+                        title={
+                          light.isFixed || light.isLocked
+                            ? 'Unlock channel (allow Auto-Recommend to move)'
+                            : 'Lock channel (prevent Auto-Recommend from moving)'
+                        }
+                        aria-label={
+                          light.isFixed || light.isLocked ? 'Unlock channel' : 'Lock channel'
+                        }
+                        className={`rounded-lg border p-1.5 ${
+                          light.isFixed || light.isLocked
+                            ? 'border-amber-500/50 bg-amber-500/15 text-amber-300'
+                            : 'border-zinc-700 bg-zinc-950 text-zinc-400 hover:text-zinc-200'
+                        }`}
+                      >
+                        {light.isFixed || light.isLocked ? (
+                          <Lock className="h-3.5 w-3.5" aria-hidden="true" />
+                        ) : (
+                          <Unlock className="h-3.5 w-3.5" aria-hidden="true" />
+                        )}
+                      </button>
 
                       <button
                         type="button"

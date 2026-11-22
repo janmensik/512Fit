@@ -24,7 +24,7 @@ export function createDemoScene(): SceneSetup {
   const initialLights: SceneLightInstance[] = [
     {
       instanceId: 'demo-rgbw-1',
-      catalogLightId: 'light-fixed-rgbw-1',
+      catalogLightId: 'light-rgbw-4ch',
       name: 'Fixed RGBW LED #1',
       profileLabel: '4ch - RGBW',
       channelCount: 4,
@@ -34,7 +34,7 @@ export function createDemoScene(): SceneSetup {
     },
     {
       instanceId: 'demo-rgbw-2',
-      catalogLightId: 'light-fixed-rgbw-2',
+      catalogLightId: 'light-rgbw-4ch',
       name: 'Fixed RGBW LED #2',
       profileLabel: '4ch - RGBW',
       channelCount: 4,
@@ -44,7 +44,7 @@ export function createDemoScene(): SceneSetup {
     },
     {
       instanceId: 'demo-rgbw-3',
-      catalogLightId: 'light-fixed-rgbw-3',
+      catalogLightId: 'light-rgbw-4ch',
       name: 'Fixed RGBW LED #3',
       profileLabel: '4ch - RGBW',
       channelCount: 4,
@@ -54,7 +54,7 @@ export function createDemoScene(): SceneSetup {
     },
     {
       instanceId: 'demo-white-1',
-      catalogLightId: 'light-fixed-white-1',
+      catalogLightId: 'light-dimmer-1ch',
       name: 'Fixed White LED #1',
       profileLabel: '1ch - White',
       channelCount: 1,
@@ -64,7 +64,7 @@ export function createDemoScene(): SceneSetup {
     },
     {
       instanceId: 'demo-white-2',
-      catalogLightId: 'light-fixed-white-2',
+      catalogLightId: 'light-dimmer-1ch',
       name: 'Fixed White LED #2',
       profileLabel: '1ch - White',
       channelCount: 1,
@@ -74,7 +74,7 @@ export function createDemoScene(): SceneSetup {
     },
     {
       instanceId: 'demo-white-3',
-      catalogLightId: 'light-fixed-white-3',
+      catalogLightId: 'light-dimmer-1ch',
       name: 'Fixed White LED #3',
       profileLabel: '1ch - White',
       channelCount: 1,
@@ -84,7 +84,7 @@ export function createDemoScene(): SceneSetup {
     },
     {
       instanceId: 'demo-white-4',
-      catalogLightId: 'light-fixed-white-4',
+      catalogLightId: 'light-dimmer-1ch',
       name: 'Fixed White LED #4',
       profileLabel: '1ch - White',
       channelCount: 1,

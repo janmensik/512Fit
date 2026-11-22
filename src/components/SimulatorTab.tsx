@@ -42,6 +42,35 @@ export function SimulatorTab({
     return Array.from(posSet);
   };
 
+  const getLightsInRange = (startCh: number, endCh: number) =>
+    lights.filter((l) => {
+      const lEnd = l.startChannel + l.channelCount - 1;
+      return l.startChannel <= endCh && lEnd >= startCh;
+    });
+
+  const getFixtureOccupancy = (fixIdx: number) => {
+    const fixStart = (fixIdx - 1) * chPerFixture + 1;
+    const pageAStart = fixStart;
+    const pageAEnd = fixStart + controller.slidersPerPage - 1;
+    const pageALights = getLightsInRange(pageAStart, pageAEnd);
+
+    const pageBStart = fixStart + controller.slidersPerPage;
+    const pageBEnd = fixIdx * chPerFixture;
+    const pageBLights = controller.hasABSwitch
+      ? getLightsInRange(pageBStart, pageBEnd)
+      : [];
+
+    return {
+      hasPageA: pageALights.length > 0,
+      hasPageB: pageBLights.length > 0,
+      pageACount: pageALights.length,
+      pageBCount: pageBLights.length,
+      isUsed: pageALights.length > 0 || pageBLights.length > 0,
+    };
+  };
+
+  const selectedFixOcc = getFixtureOccupancy(selectedFixture);
+
   const sliders = Array.from({ length: controller.slidersPerPage }, (_, i) => {
     const sliderNum = i + 1;
     const dmxCh = pageStartCh + i;
@@ -75,6 +104,7 @@ export function SimulatorTab({
                 const fixNum = idx + 1;
                 const isSelected = selectedFixture === fixNum;
                 const posList = fixturePositions(fixNum);
+                const occ = getFixtureOccupancy(fixNum);
 
                 return (
                   <button
@@ -83,11 +113,37 @@ export function SimulatorTab({
                     onClick={() => onSelectFixture(fixNum)}
                     className={`flex flex-col items-center justify-center rounded-xl border p-2.5 transition-all ${
                       isSelected
-                        ? 'border-amber-400 bg-amber-500/20 text-amber-200 shadow-lg shadow-amber-500/10'
-                        : 'border-zinc-700 bg-zinc-950 text-zinc-400 hover:border-zinc-600 hover:text-zinc-200'
+                        ? 'border-amber-400 bg-amber-500/20 text-amber-100 ring-2 ring-amber-400/50 shadow-lg shadow-amber-500/10'
+                        : occ.isUsed
+                        ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-200 hover:border-emerald-400 hover:bg-emerald-500/15'
+                        : 'border-zinc-800 bg-zinc-950/50 text-zinc-600 opacity-60 hover:opacity-90'
                     }`}
                   >
-                    <span className="text-xs font-bold">FIX {fixNum}</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-bold">FIX {fixNum}</span>
+                      {controller.hasABSwitch && (
+                        <span className="inline-flex items-center gap-0.5">
+                          <span
+                            className={`rounded px-1 text-[9px] font-bold border ${
+                              occ.hasPageA
+                                ? 'bg-emerald-500/30 text-emerald-200 border-emerald-500/50'
+                                : 'bg-zinc-900 text-zinc-600 border-zinc-800'
+                            }`}
+                          >
+                            A
+                          </span>
+                          <span
+                            className={`rounded px-1 text-[9px] font-bold border ${
+                              occ.hasPageB
+                                ? 'bg-emerald-500/30 text-emerald-200 border-emerald-500/50'
+                                : 'bg-zinc-900 text-zinc-600 border-zinc-800'
+                            }`}
+                          >
+                            B
+                          </span>
+                        </span>
+                      )}
+                    </div>
                     <span className="text-[10px] text-zinc-400 truncate max-w-full mt-0.5">
                       {posList.length > 0 ? posList.join(', ') : 'Empty'}
                     </span>
@@ -104,9 +160,12 @@ export function SimulatorTab({
             <div className="text-xs font-semibold text-zinc-300">
               Page Select (Fixture {selectedFixture})
             </div>
-            <div className="inline-flex rounded-xl border border-zinc-700 bg-zinc-950 p-1">
+            <div className="inline-flex rounded-xl border border-zinc-700 bg-zinc-950 p-1 gap-1">
               {(['A', 'B'] as const).map((page) => {
                 const active = selectedPage === page;
+                const count =
+                  page === 'A' ? selectedFixOcc.pageACount : selectedFixOcc.pageBCount;
+                const hasLights = count > 0;
                 const rangeStart =
                   (selectedFixture - 1) * chPerFixture +
                   (page === 'B' ? controller.slidersPerPage : 0) +
@@ -117,13 +176,31 @@ export function SimulatorTab({
                     key={page}
                     type="button"
                     onClick={() => onSelectPage(page)}
-                    className={`rounded-lg px-4 py-1.5 text-xs font-bold transition-colors ${
+                    className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-bold transition-colors ${
                       active
                         ? 'bg-sky-500 text-zinc-950'
-                        : 'text-zinc-400 hover:text-zinc-200'
+                        : hasLights
+                        ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/25'
+                        : 'text-zinc-500 hover:text-zinc-300'
                     }`}
                   >
-                    Page {page} (Ch {rangeStart}–{rangeEnd})
+                    {hasLights && !active && (
+                      <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                    )}
+                    <span>
+                      Page {page} (Ch {rangeStart}–{rangeEnd})
+                    </span>
+                    {hasLights && (
+                      <span
+                        className={`rounded px-1.5 py-0.5 text-[10px] ${
+                          active
+                            ? 'bg-zinc-950/20 text-zinc-950'
+                            : 'bg-emerald-500/20 text-emerald-200'
+                        }`}
+                      >
+                        {count}
+                      </span>
+                    )}
                   </button>
                 );
               })}
